@@ -25,7 +25,6 @@ public class MvcMemberSaveServlet extends HttpServlet {
 
         String viewPath = "/WEB-INF/view/save-result.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
-
         dispatcher.forward(request,response);
     }
 }
