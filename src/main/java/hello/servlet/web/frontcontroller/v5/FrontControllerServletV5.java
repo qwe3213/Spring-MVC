@@ -35,9 +35,9 @@ public class FrontControllerServletV5 extends HttpServlet {
         handlerAdapters.add(new ControllerV3HandlerAdapter());
     }
     private void initHandlerMappingMap() {
-        handlerMappingMap.put("/front-controller/v3/members/new-form", new MemberFormControllerV3());
-        handlerMappingMap.put("/front-controller/v3/members/save", new MemberSaveControllerV3());
-        handlerMappingMap.put("/front-controller/v3/members", new MemberListControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
     }
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,6 +49,13 @@ public class FrontControllerServletV5 extends HttpServlet {
         }
 
         MyHandlerAdapter adapter = getHandlerAdapter(handler);
+
+        ModelView mv = adapter.handle(request, response, handler);
+
+        String viewName = mv.getViewName();
+        Myview view = viewResolver(viewName);
+
+        view.render(mv.getModel(),request,response);
 
     }
 
@@ -62,8 +69,14 @@ public class FrontControllerServletV5 extends HttpServlet {
         throw new IllegalArgumentException("handler adapter를 찾을 수 없습니다. handler=" + handler);
     }
 
+
     private Object getHandler(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         return handlerMappingMap.get(requestURI);
     }
+    private static Myview viewResolver(String viewName) {
+        return new Myview("/WEB-INF/views/" + viewName + ".jsp");
+    }
+
 }
+
